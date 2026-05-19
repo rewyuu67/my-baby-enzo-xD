@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>i love enzo</title>
+
+<style>
+
+body{
+    margin:0;
+    overflow:hidden;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family:"Times New Roman", serif;
+}
+
+canvas{
+    position:absolute;
+}
+
+.centerText{
+    position:absolute;
+    
+    color:#ff5c8a;
+
+    font-size:85px;
+    font-style:italic;
+
+    text-shadow:
+    0 0 10px #ff5c8a,
+    0 0 20px #ff5c8a,
+    0 0 40px #ff5c8a,
+    0 0 80px #ff5c8a;
+
+    animation:pulse 2s infinite alternate;
+}
+
+@keyframes pulse{
+
+    from{
+        transform:scale(1);
+        opacity:0.8;
+    }
+
+    to{
+        transform:scale(1.05);
+        opacity:1;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div class="centerText">
+    i love enzo
+</div>
+
+<script>
+
+const canvas =
+document.getElementById("canvas");
+
+const ctx =
+canvas.getContext("2d");
+
+canvas.width =
+window.innerWidth;
+
+canvas.height =
+window.innerHeight;
+
+const particles = [];
+
+const colors = [
+    "#ff4d88",
+    "#ff6699",
+    "#ff944d",
+    "#ff3333",
+    "#ff99cc"
+];
+
+/* HEART SHAPE */
+
+function heartFunction(t){
+
+    const x =
+    16 * Math.pow(Math.sin(t), 3);
+
+    const y =
+    -(13 * Math.cos(t)
+    - 5 * Math.cos(2*t)
+    - 2 * Math.cos(3*t)
+    - Math.cos(4*t));
+
+    return {x,y};
+}
+
+/* CREATE PARTICLES */
+
+for(let i = 0; i < 500; i++){
+
+    const t =
+    Math.random() * Math.PI * 2;
+
+    const pos =
+    heartFunction(t);
+
+    particles.push({
+
+        x:
+        canvas.width / 2 +
+        pos.x * 30 +
+        (Math.random()-0.5)*25,
+
+        y:
+        canvas.height / 2 +
+        pos.y * 30 +
+        (Math.random()-0.5)*25,
+
+        size:
+        Math.random() * 16 + 10,
+
+        color:
+        colors[Math.floor(
+            Math.random()*colors.length
+        )],
+
+        speed:
+        Math.random() * 0.5 + 0.2
+    });
+}
+
+/* DRAW */
+
+function animate(){
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    particles.forEach(p => {
+
+        ctx.font =
+        `${p.size}px Times New Roman`;
+
+        ctx.fillStyle =
+        p.color;
+
+        ctx.shadowColor =
+        p.color;
+
+        ctx.shadowBlur = 15;
+
+        ctx.fillText(
+            "i love enzo",
+            p.x,
+            p.y
+        );
+
+        p.y -= p.speed;
+
+        if(p.y < -50){
+
+            p.y =
+            canvas.height + 50;
+        }
+    });
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+</script>
+
+</body>
+</html>
